@@ -1,4 +1,5 @@
 #
+# # Image Name: Core Image
 # This is Core Linux Image: CentOS | YUM | PIP | Create Users and Groups as required | No Software Installation or Start Services Commands
 # Will be Reused by BaseImage for custom Software Installations
 #

@@ -1,0 +1,52 @@
+#
+# Image Name: Custom Image
+# There we go ! Welcome to the Final Image, otherwise called as Custom Image "This image will run as a container!"
+# Custom Image: Used for Start | Stop | Env | Expose | No Installation of softwares 
+#
+# This is CustomImage (Final) > It Pulls the BaseImage > Which in turn Pulls the CoreImage
+#
+FROM ram0502ddocker/dockerimages:base_v1.0
+
+# Print the Contents of this Directory
+CMD ls -ltr /opt/p3/*
+
+# START Apache HTTPD (apachectl or httpd -k start)
+CMD httpd -k start
+
+# Verify httpd startup is successful
+CMD grep -i "resuming normal operations" /etc/httpd/logs/error_log >> /opt/p1.txt
+
+# START Apache TOMCAT (catalina)
+WORKDIR /opt/p3/apache_Tomcat/apache-tomcat-7.0.105/bin/
+CMD /opt/p3/apache_Tomcat/apache-tomcat-7.0.105/bin/catalina.sh
+
+#
+CMD ps -ef
+
+# EXPOSE Ports
+EXPOSE 80 8080
+
+
+# EntryPoint
+#ENTRYPOINT ["/opt/p3/apache_Tomcat/apache-tomcat-7.0.105/bin/catalina.sh"]
+
+ENTRYPOINT ["tail -f /dev/null"]
+
+# Keep the container running until stop
+#CMD tail -f /dev/null
+
+#
+# END
+#
+# Custom Image will Start Your Services : No Installations Performed here, just directly issue the start commands
+#
+# All required softwares are already installed and ready ! Proceed to start them.
+# 1. START Apache httpd
+# 2. START Apache Tomcat (catalina)
+# 3. Expose Port Numbers
+#
+# Use this image and access the weburl from your browser or issue wget -URL-
+# 1. HTML file hosted under Apache Tomcat (installed without YUM)
+# 2. HTML file hosted under Apache HTTPD  (installed with YUM)
+#
+# END #

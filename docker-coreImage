@@ -1,0 +1,42 @@
+# Core Linux Image
+
+# Pull the latest alpine image / smallest
+FROM alpine:latest
+
+# Install Yum Packages, yum not available for alpine LINUX - Please use apk -
+# apk is the default package manager for alipine linux
+# apk - alpine package Manager
+
+# Use apk - update & upgrade apk packages
+RUN apk update
+RUN apk upgrade
+
+
+# Use apk - Install bash: there is NO default BASH version on alpine Linux
+RUN apk add bash
+
+# Use apk - Install required software packages (Others)
+RUN apk add busybox-extras
+RUN apk add openssl
+RUN apk add htop
+RUN apk add py-pip
+RUN apk add gzip
+RUN apk add tar
+
+# Use apk - clean cache
+# RUN apk -v clean cache
+
+# Print apk - Version and Installed Packages Info
+RUN apk info -vv | sort
+
+
+# ---
+# Install Pip Packages - future use
+# DO NOT INSTALL Web Server like Apache here: use the Base Image for that @ the next step
+# DO NOT EXPOSE Ports on this image
+# DO NOT use ENTRYPOINT on this image
+# Thats not the intention of generating a core image.
+# Why ? This is because it is an Architectural Decision! to allow & extend the docker functionality, future use and reuse of the core Image
+# ---
+# Core Image Ready with ALPINE LINUX | APK | Other Required Settings
+# END

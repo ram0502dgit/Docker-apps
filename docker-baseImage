@@ -1,0 +1,26 @@
+# Start this image with a Parent Image: Parent Image Name:  Core_v1.0
+#
+FROM ram0502ddocker/dockerimages:core_v1.0
+RUN echo "This is Server Image: Apache"
+
+# Create Required Directories
+#
+RUN mkdir -p /opt/p3/downloads/ && mkdir -p /opt/p3/apache_Tomcat/
+
+# Download and Install Apache Tomcat from -tar.gz- tar ball
+#
+WORKDIR /opt/p3/apache_Tomcat/
+RUN wget http://apache.mirror.amaze.com.au/tomcat/tomcat-7/v7.0.105/bin/apache-tomcat-7.0.105.tar.gz
+RUN chmod 775 apache-tomcat-7.0.105.tar.gz && gunzip apache-tomcat-7.0.105.tar.gz && tar -xvf apache-tomcat-7.0.105.tar && ls -ltr
+
+# Set ENV Variables
+#
+ENV docker_home=/opt/p3/
+ENV httpd_home=/etc/httpd/
+ENV CATALINA_HOME=/opt/p3/apache_Tomcat/apache-tomcat-7.0.105/
+ENV JAVA_HOME=/usr/lib/jvm/java-11-openjdk-11.0.8.10-0.el7_8.x86_64/
+
+# NO ENTRYPOINT ALLOWED: This is an Installation Image for Server Software Installations
+#
+# WE do not want to Start Any Services here
+### END ###

@@ -1,3 +1,8 @@
+
+#
+# Image Name: Base Image 
+# All custom software installations carried out here
+#
 # Start this image with a Parent Image: Parent Image Name:  Core_v1.0
 #
 FROM ram0502ddocker/dockerimages:core_v1.0

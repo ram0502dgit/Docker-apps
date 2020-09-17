@@ -1,42 +1,48 @@
-# Core Linux Image
+#
+# This is Core Linux Image: CentOS | YUM | PIP | Create Users and Groups as required | No Software Installation or Start Services Commands
+# Will be Reused by BaseImage for custom Software Installations
+#
+# Pull the centos-7.0 Image
+#
+FROM centos:7
 
-# Pull the latest alpine image / smallest
-FROM alpine:latest
+# yum - update & upgrade packages
+#
+RUN yum update -y && yum upgrade -y
 
-# Install Yum Packages, yum not available for alpine LINUX - Please use apk -
-# apk is the default package manager for alipine linux
-# apk - alpine package Manager
+# yum - Install bash (your preferred bash, bash5.0)
+#
+RUN yum install bash -y
+RUN yum install epel-release -y
 
-# Use apk - update & upgrade apk packages
-RUN apk update
-RUN apk upgrade
+# yum - Install required software packages (Others)
+RUN yum install wget -y
+RUN yum install openssl -y
+RUN yum install python3-pip -y
+RUN yum install gzip -y
+RUN yum install tar -y
+RUN yum install httpd-2.4.6-93.el7.centos -y # Install a Particular Version
+RUN yum install java-11-openjdk.x86_64 -y
 
+# pip - Install required python packages
 
-# Use apk - Install bash: there is NO default BASH version on alpine Linux
-RUN apk add bash
+# Use yum - clean cache
+RUN yum clean packages
+RUN yum clean all
 
-# Use apk - Install required software packages (Others)
-RUN apk add busybox-extras
-RUN apk add openssl
-RUN apk add htop
-RUN apk add py-pip
-RUN apk add gzip
-RUN apk add tar
-
-# Use apk - clean cache
-# RUN apk -v clean cache
-
-# Print apk - Version and Installed Packages Info
-RUN apk info -vv | sort
-
+# Print yum - Version and Installed Packages Info
+RUN yum list installed
 
 # ---
-# Install Pip Packages - future use
-# DO NOT INSTALL Web Server like Apache here: use the Base Image for that @ the next step
+# DO NOT INSTALL Web Server like Apache here: use the Base Image @ the next step
 # DO NOT EXPOSE Ports on this image
 # DO NOT use ENTRYPOINT on this image
-# Thats not the intention of generating a core image.
-# Why ? This is because it is an Architectural Decision! to allow & extend the docker functionality, future use and reuse of the core Image
+#
+# Thats not the intention of generating a core image. #  Why ?
+# This is because to allow & extend the docker functionality, future use and reuse of the core Image by multiple base Images that has different Web Server installations
+#
+# Core Image Ready with CENTOS-LINUX | YUM | PIP | Users & Groups | + Other Required Settings
+#
 # ---
-# Core Image Ready with ALPINE LINUX | APK | Other Required Settings
+#
 # END

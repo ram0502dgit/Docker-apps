@@ -1,0 +1,147 @@
+---
+ - hosts: localhost
+   gather_facts: true
+   vars:
+    region: ap-southeast-2
+    instance_ids:
+          - 'i-03bc542f03bce434a'
+          - 'i-0cd520cfa214f4bd1'
+          - 'i-00b190337ee86e1ad'
+   tasks:
+
+    - name: Check - If EC2 Instances are running
+      ec2_instance_info:
+        instance_ids: '{{ instance_ids }}'
+        region: '{{ region }}'
+      register: ec2Info
+
+    - name: Start - EC2 Instances
+      ec2:
+        instance_ids: '{{ instance_ids }}'
+        region: '{{ region }}'
+        state: running
+        wait: true
+
+    - name: ipifyFacts - PublicIP
+      ipify_facts:
+      register: publicip_ec2
+      with_items: "{{instance_ids}}"
+
+
+    - name: Print - EC2 Info Instance Information
+      debug:
+        msg: "Print - EC2 Instance"
+        msg: "{{ipify_public_ip}}"
+      with_items: "{{instance_ids}}"
+
+    - name: Switch - To root User
+      command: echo "Switching to Root User"
+      become: true
+      become_user: root
+      with_items: "{{instance_ids}}"
+
+    - name: Create - Group
+      become: true
+      become_user: root
+      group:
+        name: remote-grp
+      with_items: "{{instance_ids}}"
+
+    - name: Create - User
+      become: true
+      become_user: root
+      user:
+        name: remote-user
+        group: remote-grp
+      with_items: "{{instance_ids}}"
+
+    - name: Set - Home Dir Permissions (Remote User)
+      become: true
+      become_user: remote-user
+      file:
+        path: /home/remote-user/
+        mode: 0755
+      with_items: "{{instance_ids}}"
+
+    - name: Create - Files and Directories (Remote User)
+      become: true
+      become_user: remote-user
+      file:
+        path: "/home/remote-user/{{item}}"
+        state: directory
+        owner: remote-user
+        group: remote-grp
+        mode: 0755
+        recurse: yes
+      with_items: ["p3"]
+      with_items: "{{instance_ids}}"
+
+    - name: Create - Files and Directories (Root User)
+      become: true
+      become_user: root
+      file:
+        path: "/opt3/{{item}}"
+        state: directory
+        owner: root
+        group: root
+        mode: 0755
+        recurse: yes
+      with_items: ["p3"]
+      with_items: "{{instance_ids}}"
+
+    - name: Set - Opt3 Dir Permissions (Root User)
+      become: true
+      become_user: root
+      file:
+        path: /opt3
+        mode: 0755
+        state: directory
+        recurse: yes
+
+    - name: Create - Files and Directories (ec2-user)
+      become: true
+      become_user: root
+      file:
+        path: "/home/ec2-user/{{item}}"
+        state: absent
+      with_items: ["p4", "dir1", "dir2"]
+
+    - name: Install - YUM Software Packages
+      become_user: remote-user
+      become: true
+      yum:
+        name: python-pip
+        state: present
+
+    - name: Install - PIP Software Packages
+      become_user: remote-user
+      become: true
+      pip:
+        name: docker
+        state: present
+
+    - name: Install - Multiple YUM Packages
+      become_user: root
+      become: true
+      yum:
+        state: installed
+        name:
+           - docker-ce-cli
+           - containerd.io
+           - docker-ce
+           - openssl
+
+    - name: Start - Docker Service
+      become: true
+      service:
+        name: docker
+        enabled: yes
+        state: restarted
+
+    - name: Just a debug msg
+      debug:
+        msg: End of Ansible Playbook Executions
+
+# Empty Line is NOT a Problem
+
+# END

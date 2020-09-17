@@ -1,0 +1,22 @@
+# Ensure Docker Login is Complete and Working
+
+# docker login --username=ram0502ddocker
+
+# Start this image with a Parent Image:  Core_v1.0 (pull this from docker hub.)
+
+FROM ram0502ddocker/dockerimages:core_v1.0
+RUN echo "This is Server Image: Apache"
+
+# Set Volume
+VOLUME /opt
+
+WORKDIR /opt/p3/downloads
+WORKDIR /opt/p3/apache_246
+
+RUN wget http://apache.mirror.serversaustralia.com.au/httpd/httpd-2.4.46.tar.gz
+
+# Install Apache
+
+ENTRYPOINT tail -f /dev/null
+
+# END

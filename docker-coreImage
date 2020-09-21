@@ -1,6 +1,7 @@
 #
-# # Image Name: Core Image
-# This is Core Linux Image: CentOS | YUM | PIP | Create Users and Groups as required | No Software Installation or Start Services Commands
+# Image Name: Core Image
+# This is Core Linux Image: CentOS | YUM | PIP | Install System Softwares (that which extends the basic -OS- functions) | Create Users and Groups as required
+# No -User- Software Installation or Start/Stop/Configure Services Commands such as Tomcat | Apache HTTPD | WebSphere Application Server or JBOSS
 # Will be Reused by BaseImage for custom Software Installations
 #
 # Pull the centos-7.0 Image
@@ -22,10 +23,11 @@ RUN yum install openssl -y
 RUN yum install python3-pip -y
 RUN yum install gzip -y
 RUN yum install tar -y
-RUN yum install httpd-2.4.6-93.el7.centos -y # Install a Particular Version
-RUN yum install java-11-openjdk.x86_64 -y
 
 # pip - Install required python packages
+# pip install <package_name>
+
+# No pip for now
 
 # Use yum - clean cache
 RUN yum clean packages

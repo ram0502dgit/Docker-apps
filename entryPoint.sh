@@ -7,10 +7,6 @@ echo -e "\n\n\n"
 echo "### START ###"
 echo "Script Start Time: $starttime >"
 
-# echo
-#
-#ls -ltr /opt1/server_installs/apache_Tomcat/apache-tomcat-7.0.105/webapps/ROOT/
-
 # Start httpd
 #
 echo -e "\n\n"
@@ -40,7 +36,6 @@ echo "Executing -SLEEP- before -STOP- Apache HTTPD STOP | Tomcat STOP..."
 echo "Sleeping..."
 sleep 7
 
-
 # Stop HTTPD
 echo -e "\n\n"
 echo "HTTPD Stopping..."
@@ -57,8 +52,7 @@ echo "Tomcat Stopped..."
 # Script End Time
 #
 endtime="$(date)"
-echo -e "\n\n\n"
-echo "Script End Time: $endtime >"
+echo -e "\n\n Script End Time: $endtime >"
 
 # Exit Container
 #
